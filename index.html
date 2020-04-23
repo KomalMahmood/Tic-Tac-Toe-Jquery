@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tic Tac Toe</title>
+	<!-- <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap" rel="stylesheet"> -->
+	<!-- <link href="https://fonts.googleapis.com/css?family=Patua+One&display=swap" rel="stylesheet"> -->
+	<style type="text/css">
+        /*body
+        {
+        	background-image: url("images (2).jfif");
+			background-size: 100vw 100vh;
+			background-repeat: no-repeat;
+        }*/
+        *
+        {
+        	font-family: 'Squada One', cursive;
+        }
+		table tr td
+		{
+			border:1px solid black;
+			width: 100px;
+			height: 100px;
+			background:linear-gradient(45deg,black,#FFA07A);
+			text-align: center;
+			font-size: 30px;
+		}
+		table tr td:hover
+		{
+			background:linear-gradient(-45deg,black,#FFA07A);
+			/*cursor: pointer;*/
+		}
+		table
+		{
+			border-spacing: 7px;
+		}
+		.container
+		{
+			margin:120px auto;
+			width: 340px;
+		}
+		.btn-group button
+		{
+			width: 100px;
+			height: 40px;
+		    color: black;
+		    background: lightgreen;
+		    /*border:none;*/
+		    
+		    outline: none;
+		    cursor: pointer;
+		    font-size: 15px;
+
+		}
+		.btn-group button:nth-child(2)
+		{
+			margin-left: 100px;
+		}
+		.btn-group .tictactoe
+		{
+		/*background:linear-gradient(to right,brown,salmon,transparent);*/
+		background:url("images (2).jfif");
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+			padding:120px 20px;
+			text-align: center;
+			margin-top: 0px;	
+			box-sizing: border-box;
+
+		}
+		.btn-group
+		{
+			
+			margin:160px auto;
+			width: 420px;
+			text-align: center;
+			
+		}
+		.winner
+		{
+           padding: 30px;
+           margin-top:10px;
+           font-size: 50px;
+           margin:20px auto;
+           /*box-shadow: 0px 0px 2px 6px black;*/
+           text-align: center;
+           width: 300px;
+            
+		}
+		#playAgain
+		{
+			width: 150px;
+			height: 50px;
+			margin-left: 0%;
+			position: relative;
+			top:-230px;
+			cursor: pointer;
+			border: none;
+			outline: none;
+			font-size: 20px;
+		}
+	</style>
+</head>
+<body>
+<div class="btn-group">
+	
+	<div class="tictactoe"></div>
+	<h1>SELECT ONE OPTION</h1>
+  <button id="p1">1 Player</button>
+  <button id="p2">2 Players</button>
+</div>
+    <div class="container">
+	<h1 style="margin-left: 10px;margin-bottom: 35px;">TIC TAC TOE GAME</h1>
+<table>
+	<tr>
+		<td id="1"></td>
+		<td id="2"></td>
+		<td id="3"></td>
+	</tr>
+	<tr>
+		<td id="4"></td>
+		<td id="5"></td>
+		<td id="6"></td>
+	</tr>
+	<tr>
+		<td id="7"></td>
+		<td id="8"></td>
+		<td id="9"></td>
+	</tr>
+</table>
+
+</div>
+<audio src="winner.mp3"></audio>
+<audio src="looser.mp3"></audio>
+<audio src="tie.mp3"></audio>
+
+<!-- <script type="text/javascript" src="jquery-3.4.1.min.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+	 
+	
+	$('document').ready(function(){
+
+		var move=1;
+	var play = true;
+  var winnerAudio=document.getElementsByTagName('audio')[0];
+  var looserAudio=document.getElementsByTagName('audio')[1];
+  var tieAudio=document.getElementsByTagName('audio')[2];
+
+
+     $('.container').hide();
+      
+     // 1 Player function
+
+     $('#p1').click(function(){
+      $('.btn-group').hide();
+      $('.container').show();
+
+      $('table tr td').click(function()
+      	{ 
+       if($(this).text() == "" && play)
+       {
+        if(move != 5)
+        {
+         	$(this).append("X");
+            $(this).css({"color":"salmon"});
+        
+         
+         	
+
+         	do
+         	{
+         	 var r = random();
+         	var str = $(r).text();
+         	}while(str != "");
+           
+            
+            // $(r).click();
+         	$(r).append("O");
+         	$(r).css({"color":"#F4A460"});
+          }
+         else
+         {
+            $(this).append("X");
+            $(this).css({"color":"salmon"});
+         }
+         move++;
+  	       if(winner() != -1 && winner() != ""){
+       	if(winner() == "X")
+              {
+              	$('.container').hide();
+                $('body').append('<div class="winner">You Win</div>');
+                $('body').append('<button id="playAgain" onclick="location.reload();">Play Again</button>');
+                $('body').css({"background":"url('pic1.gif')","background-size":"100vw 100vh","background-repeat":"no-repeat"});
+                // $('.winner').css({"background-color":"salmon"});
+                $('#playAgain').css({"background-color":"lightgreen","top":"-160px"});
+                winnerAudio.play();
+                
+
+
+              }
+              else 
+              { 
+              	$('.container').hide();
+                $('body').append('<div class="winner">You Lose</div>');
+                $('body').append('<button id="playAgain" onclick="location.reload();">Play Again</button>');
+                $('body').append('<button id="playAgain" onclick="location.reload();">Play Again</button>');
+                $('body').css({"background":"url('giphy.gif')","background-position":"0px 100px","background-size":"100vw 100vh","background-repeat":"no-repeat"});
+                $('.winner').css({"color":"red"});
+                $('#playAgain').css({"background-color":"red","top":"-160px"});
+                looserAudio.play();
+                
+              }
+              play = false;
+       }
+
+      if(winner() == -1 && move == 6)
+      {
+        // alert('tie');
+        $('.container').hide();
+                $('body').append('<div class="winner" style="font-size:80px;">Tie</div>');
+                $('body').append('<button id="playAgain" onclick="location.reload();">Play Again</button>');
+               $('body').css({"background":"url('tie.gif')","background-size":"100vw 100vh","background-repeat":"no-repeat"});
+                $('.winner').css({"color":"grey"});
+                $('#playAgain').css({"background-color":"lightgreen","top":"-190px"});
+                 tieAudio.play();
+      }
+   }
+  });
+     });
+      
+      function random()
+      {
+      	var rand = Math.floor(Math.random() * (9-1+1))+1;
+      	var randStr = "#" + rand;
+      	return randStr;
+      }
+     // 2 Players function
+
+     $('#p2').click(function(){
+      $('.btn-group').hide();
+      $('.container').show();
+      // $('body').css({"background":"white"});
+      	$('table tr td').click(function()
+      	{ 
+
+           if($(this).text() == "" && play)
+           {
+              if(move%2 == 1)
+              {
+              	$(this).append("X");
+              	$(this).css({"color":"salmon"});
+
+              }
+              else
+              {
+              	$(this).append("O");
+              	$(this).css({"color":"#F4A460"});
+
+              }
+              move++;
+              if(winner() != -1 && winner() != "")
+              {
+              if(winner() == "X")
+              {
+              	$('.container').hide();
+                $('body').append('<div class="winner">Winner Player1("X")</div>');
+                $('body').append('<button id="playAgain" onclick="location.reload();">Play Again</button>');
+                $('body').css({"background":"url('pic1.gif')","background-size":"100vw 100vh","background-repeat":"no-repeat"});
+                // $('.winner').css({"background-color":"salmon"});
+                $('#playAgain').css({"background-color":"salmon"});
+                winnerAudio.play();
+
+
+
+              }
+              else
+              { 
+              	$('.container').hide();
+                $('body').append('<div class="winner">Winner Player2("O")</div>');
+                $('body').append('<button id="playAgain" onclick="location.reload();">Play Again</button>');
+                $('body').css({"background":"url('pic1.gif')","background-size":"100vw 100vh","background-repeat":"no-repeat"});
+                // $('.winner').css({"background-color":"#F4A460"});
+                $('#playAgain').css({"background-color":"#F4A460"});
+                winnerAudio.play();
+              }
+              play = false;
+          }
+          if(winner() == -1 && move == 10)
+      {
+        // alert('tie');
+        $('.container').hide();
+                $('body').append('<div class="winner" style="font-size:80px;">Tie</div>');
+                $('body').append('<button id="playAgain" onclick="location.reload();">Play Again</button>');
+                $('body').css({"background":"url('tie.gif')","background-size":"100vw 100vh","background-repeat":"no-repeat"});
+                $('.winner').css({"color":"grey"});
+                $('#playAgain').css({"background-color":"lightgreen","top":"-190px"});
+                 tieAudio.play();
+      }
+           }
+           
+           
+           
+      	});
+      
+     });
+     function winner()
+     {
+          var data1 = $('table tr:nth-child(1) td:nth-child(1)').text();
+          var data2 = $('table tr:nth-child(1) td:nth-child(2)').text();
+          var data3 = $('table tr:nth-child(1) td:nth-child(3)').text();
+          var data4 = $('table tr:nth-child(2) td:nth-child(1)').text();
+          var data5 = $('table tr:nth-child(2) td:nth-child(2)').text();
+          var data6 = $('table tr:nth-child(2) td:nth-child(3)').text();
+          var data7 = $('table tr:nth-child(3) td:nth-child(1)').text();
+          var data8 = $('table tr:nth-child(3) td:nth-child(2)').text();
+          var data9 = $('table tr:nth-child(3) td:nth-child(3)').text();
+
+          // check rows
+
+          if((data1 == data2) && (data2 == data3))
+          return data3;
+          else if((data4 == data5) && (data5 == data6))
+          	return data6;
+          else if((data7 == data8) && (data8 == data9))
+          	return data9;
+
+
+          // check columns
+
+          else if((data1 == data4) && (data4 == data7))
+          	return data7;
+          else if((data2 == data5) && (data5 == data8))
+          	return data8;
+          else if((data3 == data6) && (data6 == data9))
+          	return data9;
+
+          // check digonal
+
+          else if((data1 == data5) && (data5 == data9))
+          	return data9;
+          else if((data3 == data5) && (data5 == data7))
+          	return data7;
+
+          // No winner (draw)
+
+          else
+          	return -1;
+     }
+
+	});
+</script>
+</body>
+</html>
